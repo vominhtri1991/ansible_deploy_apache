@@ -1,0 +1,24 @@
+---
+# tasks file for apache-with-status
+   - name: Installing Aapche using yum module
+     yum:
+       name: httpd
+       state: present
+
+   - name: Copy configuration Jinja2 template file
+     template:
+       src: custom.jinja
+       dest: /etc/httpd/conf.d/custom.conf
+       owner: root
+       group: root
+       mode: 0644
+
+   - name: Copy module configuation file for enableing mpm-worker
+     copy:
+       src: 00-mpm.conf.template
+       dest: /etc/httpd/conf.modules.d/00-mpm.conf
+       owner: root
+       group: root
+       mode: 0644
+     notify:
+      - start httpd
